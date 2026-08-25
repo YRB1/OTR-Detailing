@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — OTR Detailing</title>
+<link rel="icon" href="../assets/images/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css?v=6">
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a href="../index.html" class="brand">
+      <img src="../assets/images/logo.jpg" alt="OTR Detailing logo">
+      <span class="brand-text">OTR<small>Detailing</small></span>
+    </a>
+    <nav class="admin-nav">
+      <a href="dashboard.html">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Bookings
+      </a>
+      <a href="customers.html">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Customers
+      </a>
+      <a href="settings.html" class="active">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 005 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09A1.65 1.65 0 0015 4.6a1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019 9c.11.35.32.66.6.9.28.24.63.4 1 .45"/></svg>
+        Settings
+      </a>
+      <a href="../index.html" target="_blank">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+        View Live Site
+      </a>
+      <button id="logout-btn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+        Log Out
+      </button>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1>Settings</h1>
+        <p>Business details shown to customers and used across bookings.</p>
+      </div>
+    </div>
+
+    <form id="settings-form">
+      <div class="panel">
+        <div class="panel-head"><h3>Business Profile</h3></div>
+        <div class="form-row two">
+          <div>
+            <label for="s-name">Business Name</label>
+            <input type="text" id="s-name" required>
+          </div>
+          <div>
+            <label for="s-email">Contact Email</label>
+            <input type="email" id="s-email" required>
+          </div>
+        </div>
+        <div class="form-row two">
+          <div>
+            <label for="s-phone">Phone <span style="text-transform:none;color:var(--text-faint)">(optional)</span></label>
+            <input type="tel" id="s-phone" placeholder="07700 900000">
+          </div>
+          <div>
+            <label for="s-area">Service Area</label>
+            <input type="text" id="s-area" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <label for="s-hours">Opening Hours</label>
+          <input type="text" id="s-hours" required>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Service Pricing</h3></div>
+        <div class="form-row two">
+          <div>
+            <label for="s-price-interior">Interior Clean (£)</label>
+            <input type="number" id="s-price-interior" min="0" step="1" required>
+          </div>
+          <div>
+            <label for="s-price-exterior">Exterior Clean (£)</label>
+            <input type="number" id="s-price-exterior" min="0" step="1" required>
+          </div>
+        </div>
+        <div class="form-row two">
+          <div>
+            <label for="s-price-full">Full Interior &amp; Exterior (£)</label>
+            <input type="number" id="s-price-full" min="0" step="1" required>
+          </div>
+          <div>
+            <label for="s-cancel-fee">Late Cancellation Fee (£)</label>
+            <input type="number" id="s-cancel-fee" min="0" step="1" required>
+          </div>
+        </div>
+        <p style="font-size:12.5px;color:var(--text-faint);margin-top:-8px">
+          Note: this is a front-end demo, so pricing here is saved for reference only and won't update the live booking form automatically.
+        </p>
+      </div>
+
+      <div style="display:flex;gap:14px;justify-content:flex-end">
+        <button type="button" class="btn btn-ghost" id="reset-btn">Reset to Defaults</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/settings.js"></script>
+</body>
+</html>

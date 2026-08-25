@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owner Login — OTR Detailing</title>
+<link rel="icon" href="../assets/images/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css?v=6">
+</head>
+<body>
+
+<div class="admin-login-wrap">
+  <div class="admin-login-card reveal-scale">
+    <a href="../index.html" class="brand">
+      <img src="../assets/images/logo.jpg" alt="OTR Detailing logo">
+      <span class="brand-text">OTR<small>Detailing</small></span>
+    </a>
+    <h1>Owner Login</h1>
+    <p class="sub">Sign in to manage bookings</p>
+
+    <div class="login-error" id="login-error">Incorrect username or password. Try again.</div>
+
+    <form id="login-form" novalidate>
+      <div class="form-row">
+        <label for="li-user">Username</label>
+        <input type="text" id="li-user" placeholder="gideon" required autocomplete="username">
+      </div>
+      <div class="form-row">
+        <label for="li-pass">Password</label>
+        <div class="password-field">
+          <input type="password" id="li-pass" placeholder="••••••••" required autocomplete="current-password">
+          <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Show password">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-row checkbox">
+        <input type="checkbox" id="li-remember">
+        <label for="li-remember">Remember me on this device</label>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Log In</button>
+    </form>
+
+    <div class="admin-hint">
+      Demo credentials — username <code>gideon</code>, password <code>otr2026</code>
+    </div>
+
+    <div class="center-btn-row" style="margin-top:24px">
+      <a href="../index.html" class="btn btn-ghost btn-sm">← Back to Site</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/store.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  const loginForm = document.getElementById("login-form");
+  const loginError = document.getElementById("login-error");
+  const userInput = document.getElementById("li-user");
+  const rememberInput = document.getElementById("li-remember");
+  const pwInput = document.getElementById("li-pass");
+  const pwToggle = document.getElementById("pw-toggle");
+
+  if (OTRStore.isAuthed()) {
+    window.location.href = "dashboard.html";
+  }
+
+  const rememberedUser = OTRStore.getRememberedUser();
+  if (rememberedUser) {
+    userInput.value = rememberedUser;
+    rememberInput.checked = true;
+  }
+
+  const eyeIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const eyeOffIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a18.6 18.6 0 015.06-5.94M9.9 4.24A10.6 10.6 0 0112 4c7 0 11 7 11 7a18.7 18.7 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><path d="M1 1l22 22"/></svg>';
+
+  pwToggle.addEventListener("click", () => {
+    const showing = pwInput.type === "text";
+    pwInput.type = showing ? "password" : "text";
+    pwToggle.innerHTML = showing ? eyeIcon : eyeOffIcon;
+    pwToggle.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+  });
+
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const user = userInput.value;
+    const pass = pwInput.value;
+    if (OTRStore.login(user, pass, rememberInput.checked)) {
+      window.location.href = "dashboard.html";
+    } else {
+      loginError.classList.add("show");
+    }
+  });
+</script>
+</body>
+</html>

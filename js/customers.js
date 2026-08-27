@@ -86,17 +86,17 @@
     list.forEach((c) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td>
+        <td data-label="Customer">
           <div style="display:flex;align-items:center;gap:12px">
             <span class="avatar" style="width:34px;height:34px;font-size:12px">${initials(c.name)}</span>
             <strong>${escapeHtml(c.name)}</strong>
           </div>
         </td>
-        <td>${escapeHtml(c.email)}<br><span style="color:var(--text-faint);font-size:12px">${escapeHtml(c.phone)}</span></td>
-        <td>${escapeHtml(Array.from(c.vehicles).join(", "))}</td>
-        <td>${c.bookingCount}</td>
-        <td>${money(c.totalSpent)}</td>
-        <td>${fmtDate(c.lastDate)}</td>
+        <td data-label="Contact"><div>${escapeHtml(c.email)}<br><span style="color:var(--text-faint);font-size:12px">${escapeHtml(c.phone)}</span></div></td>
+        <td data-label="Vehicles">${escapeHtml(Array.from(c.vehicles).join(", "))}</td>
+        <td data-label="Bookings">${c.bookingCount}</td>
+        <td data-label="Total Spent">${money(c.totalSpent)}</td>
+        <td data-label="Last Booking">${fmtDate(c.lastDate)}</td>
       `;
       tbody.appendChild(tr);
     });

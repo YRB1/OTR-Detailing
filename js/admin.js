@@ -83,18 +83,18 @@
     list.forEach((b) => {
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><strong>${b.id}</strong></td>
-        <td>${escapeHtml(b.customer.name)}<br><span style="color:var(--text-faint);font-size:12px">${escapeHtml(b.customer.phone)}</span></td>
-        <td>${escapeHtml(b.vehicle.color)} ${escapeHtml(b.vehicle.make)} ${escapeHtml(b.vehicle.model)}</td>
-        <td>${escapeHtml(b.serviceName)}</td>
-        <td>${fmtDate(b.date, b.time)}</td>
-        <td>${money(b.price)}</td>
-        <td>
+        <td data-label="Reference"><strong>${b.id}</strong></td>
+        <td data-label="Customer"><div>${escapeHtml(b.customer.name)}<br><span style="color:var(--text-faint);font-size:12px">${escapeHtml(b.customer.phone)}</span></div></td>
+        <td data-label="Vehicle">${escapeHtml(b.vehicle.color)} ${escapeHtml(b.vehicle.make)} ${escapeHtml(b.vehicle.model)}</td>
+        <td data-label="Service">${escapeHtml(b.serviceName)}</td>
+        <td data-label="Date &amp; Time">${fmtDate(b.date, b.time)}</td>
+        <td data-label="Price">${money(b.price)}</td>
+        <td data-label="Status">
           <select class="status-select" data-id="${b.id}" style="background:var(--bg-alt);border:1px solid var(--line-strong);border-radius:8px;padding:6px 10px;font-size:12.5px;margin-top:8px">
             ${STATUS_ORDER.map((s) => `<option value="${s}" ${s === b.status ? "selected" : ""}>${STATUS_LABEL[s]}</option>`).join("")}
           </select>
         </td>
-        <td>
+        <td data-label="Actions">
           <div class="row-actions">
             <button class="icon-btn view-btn" data-id="${b.id}" title="View details">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>

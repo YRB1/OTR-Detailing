@@ -314,7 +314,11 @@
     backToTop.classList.add("above-cta");
     window.addEventListener(
       "scroll",
-      () => cta.classList.toggle("show", window.scrollY > window.innerHeight * 0.85),
+      () =>
+        cta.classList.toggle(
+          "show",
+          window.scrollY > window.innerHeight * 0.85 && !document.querySelector(".cookie-banner.show")
+        ),
       { passive: true }
     );
   }
@@ -417,4 +421,45 @@
     const href = a.getAttribute("href").split("/").pop();
     if (href === path) a.classList.add("active");
   });
+
+  /* ---------- Admin session idle timeout ----------
+     Only runs on authenticated admin pages (they load store.js before this
+     file). Not a substitute for a real server-side session — see the note
+     in store.js — but a reasonable client-side safeguard for this mockup. */
+  if (document.querySelector(".admin-shell") && typeof OTRStore !== "undefined" && OTRStore.isAuthed()) {
+    let idleTimer;
+    function resetIdleTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        OTRStore.logout();
+        window.location.href = "login.html?expired=1";
+      }, OTRStore.IDLE_TIMEOUT_MS);
+    }
+    ["mousemove", "keydown", "click", "scroll", "touchstart"].forEach((evt) =>
+      document.addEventListener(evt, resetIdleTimer, { passive: true })
+    );
+    resetIdleTimer();
+  }
+
+  /* ---------- Cookie consent banner ---------- */
+  if (!localStorage.getItem("otr_cookie_consent")) {
+    const banner = document.createElement("div");
+    banner.className = "cookie-banner";
+    const onAdminPage = !!document.querySelector(".admin-shell, .admin-login-wrap");
+    const prefix = onAdminPage ? "../" : "";
+    banner.innerHTML = `
+      <p>We use essential local storage to run bookings and keep you signed in — no advertising or tracking cookies. See our <a href="${prefix}cookies.html">Cookie Policy</a>.</p>
+      <div class="cookie-actions">
+        <a href="${prefix}cookies.html" class="btn btn-ghost btn-sm">Learn More</a>
+        <button type="button" class="btn btn-primary btn-sm" id="cookie-accept">Got It</button>
+      </div>
+    `;
+    document.body.appendChild(banner);
+    requestAnimationFrame(() => banner.classList.add("show"));
+    document.getElementById("cookie-accept").addEventListener("click", () => {
+      localStorage.setItem("otr_cookie_consent", "1");
+      banner.classList.remove("show");
+      setTimeout(() => banner.remove(), 400);
+    });
+  }
 })();

@@ -169,12 +169,56 @@ const OTRStore = (function () {
     writeAll(list);
   }
 
-  /* ---------- auth (demo only, not real security) ---------- */
+  /* ---------- auth ----------
+     This is a static front-end mockup with no server, so this cannot be
+     real authentication — the "password" ships in this readable JS file
+     no matter how it's obscured. What's implemented here (attempt lockout,
+     idle timeout) is realistic *client-side UX* for those features, not
+     a substitute for server-side auth, hashed credentials over HTTPS, and
+     rate limiting that a real backend would need. */
   const DEMO_USER = "gideon";
   const DEMO_PASS = "otr2026";
+  const ATTEMPTS_KEY = "otr_admin_attempts";
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_MS = 60 * 1000;
+  const IDLE_TIMEOUT_MS = 15 * 60 * 1000;
+
+  function getAttemptState() {
+    try {
+      return Object.assign({ count: 0, lockedUntil: 0 }, JSON.parse(sessionStorage.getItem(ATTEMPTS_KEY)));
+    } catch (e) {
+      return { count: 0, lockedUntil: 0 };
+    }
+  }
+  function setAttemptState(state) {
+    sessionStorage.setItem(ATTEMPTS_KEY, JSON.stringify(state));
+  }
+  function isLockedOut() {
+    return getAttemptState().lockedUntil > Date.now();
+  }
+  function getLockoutSecondsLeft() {
+    return Math.max(0, Math.ceil((getAttemptState().lockedUntil - Date.now()) / 1000));
+  }
+  function getAttemptsLeft() {
+    return Math.max(0, MAX_ATTEMPTS - getAttemptState().count);
+  }
+  function recordFailedAttempt() {
+    const state = getAttemptState();
+    state.count += 1;
+    if (state.count >= MAX_ATTEMPTS) {
+      state.lockedUntil = Date.now() + LOCKOUT_MS;
+      state.count = 0;
+    }
+    setAttemptState(state);
+  }
+  function clearAttempts() {
+    sessionStorage.removeItem(ATTEMPTS_KEY);
+  }
 
   function login(user, pass, remember) {
+    if (isLockedOut()) return false;
     if (user.trim().toLowerCase() === DEMO_USER && pass === DEMO_PASS) {
+      clearAttempts();
       if (remember) {
         localStorage.setItem(AUTH_KEY, "1");
         localStorage.setItem(REMEMBER_KEY, user.trim());
@@ -186,6 +230,7 @@ const OTRStore = (function () {
       }
       return true;
     }
+    recordFailedAttempt();
     return false;
   }
 
@@ -214,5 +259,9 @@ const OTRStore = (function () {
     getRememberedUser,
     getSettings,
     saveSettings,
+    isLockedOut,
+    getLockoutSecondsLeft,
+    getAttemptsLeft,
+    IDLE_TIMEOUT_MS,
   };
 })();

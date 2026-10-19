@@ -124,7 +124,7 @@ Deno.serve(async (req) => {
   try {
     const session = await stripe("checkout/sessions", {
       mode: "payment",
-      ui_mode: "embedded",
+      ui_mode: "embedded_page",
       return_url: `${SITE_URL}/booking.html?session_id={CHECKOUT_SESSION_ID}`,
       customer_email: input.email,
       client_reference_id: booking.id,

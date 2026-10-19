@@ -272,7 +272,7 @@
     } else {
       wizardActions.style.display = "flex";
       btnBack.style.visibility = n === 1 ? "hidden" : "visible";
-      btnNext.hidden = false;
+      btnNext.style.display = "";
       btnNext.disabled = false;
       btnNext.textContent = n === TOTAL_INPUT_STEPS ? `Pay £${Number(state.price || 0).toFixed(2)} & Book` : "Continue";
     }
@@ -318,7 +318,7 @@
       checkout = await stripe.initEmbeddedCheckout({ fetchClientSecret: async () => result.clientSecret });
       checkoutMount.hidden = false;
       checkout.mount(checkoutMount);
-      btnNext.hidden = true;
+      btnNext.style.display = "none";
       btnBack.textContent = "Change Details";
       checkoutMount.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {

@@ -3,7 +3,7 @@ import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.4
 
 export const env = (name: string, fallback = ""): string => Deno.env.get(name) ?? fallback;
 
-export const SITE_URL = env("SITE_URL", "https://yrb1.github.io/OTR-Detailing").replace(/\/+$/, "");
+export const SITE_URL = env("SITE_URL", "https://otr-detailing.vercel.app").replace(/\/+$/, "");
 
 export const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": env("ALLOWED_ORIGIN", "*"),

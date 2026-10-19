@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /OTR-Detailing/admin/
 Disallow: /admin/
 
-Sitemap: https://yrb1.github.io/OTR-Detailing/sitemap.xml
+Sitemap: https://otr-detailing.vercel.app/sitemap.xml

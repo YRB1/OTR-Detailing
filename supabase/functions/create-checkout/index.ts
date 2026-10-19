@@ -1,7 +1,7 @@
 // Creates a pending booking (a 30-minute hold on the slot) and a Stripe
 // Embedded Checkout session for it. The price always comes from the database,
 // never from the browser.
-import { adminClient, corsHeaders, json, londonToUtc, SITE_URL, stripe } from "../_shared/otr.ts";
+import { adminClient, corsHeaders, env, json, londonToUtc, SITE_URL, stripe } from "../_shared/otr.ts";
 
 const HOLD_MINUTES = 31; // Stripe's minimum session expiry is 30 minutes
 const MAX_ACTIVE_HOLDS = 12;
@@ -11,6 +11,8 @@ const str = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  // Lets the booking page know whether online payment is fully configured.
+  if (req.method === "GET") return json({ ready: !!env("STRIPE_SECRET_KEY") && !!env("STRIPE_WEBHOOK_SECRET") });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   let body: Record<string, any>;

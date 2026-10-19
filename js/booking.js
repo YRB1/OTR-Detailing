@@ -54,12 +54,24 @@
   }
 
   /* ---------- not connected yet: show the message-us fallback ---------- */
-  if (!OTRApi.configured || !window.Stripe || !OTRApi.config.stripePublishableKey) {
+  function showOffline() {
     steps.forEach((s) => (s.hidden = true));
     wizardActions.style.display = "none";
     document.getElementById("progress-track").style.display = "none";
     document.getElementById("booking-offline").hidden = false;
+  }
+  if (!OTRApi.configured || !window.Stripe || !OTRApi.config.stripePublishableKey) {
+    showOffline();
     return;
+  }
+  // Server-side Stripe keys may not be set yet; don't let customers fill in a form they can't pay for.
+  if (!new URLSearchParams(window.location.search).get("session_id")) {
+    fetch(OTRApi.config.supabaseUrl + "/functions/v1/create-checkout", {
+      headers: { apikey: OTRApi.config.supabaseAnonKey, Authorization: "Bearer " + OTRApi.config.supabaseAnonKey },
+    })
+      .then((r) => r.json())
+      .then((d) => { if (!d.ready) showOffline(); })
+      .catch(() => {});
   }
 
   /* ---------- returning from Stripe ---------- */

@@ -7,7 +7,7 @@
 window.OTR_CONFIG = {
   supabaseUrl: "https://banccxqxuidvyczkhopj.supabase.co",
   supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhbmNjeHF4dWlkdnljemtob3BqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MzEyOTYsImV4cCI6MjEwODAwNzI5Nn0.LCMkp9ruV0kz8BroM_oNy4mahxBLjHo4BXOT6GXNV9g",
-  stripePublishableKey: "",
+  stripePublishableKey: "pk_live_51USNLfDTJsNRlGmyKqXqkv6ytvXCHrtoA43EXMpfwXsfHvncArQRFbqsNsT0HDPJywogOTCFWZe81bYPrnpAsgGP00nt50XqsB",
   instagramUrl: "https://www.instagram.com/otrdetailing.uk/",
   contactEmail: "otr.detailinguk@gmail.com",
 };

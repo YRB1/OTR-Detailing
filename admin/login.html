@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>Owner Login — OTR Detailing</title>
-<link rel="icon" href="../assets/images/logo.jpg">
+<link rel="icon" href="../assets/images/favicon-32.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/styles.css?v=9">
+<link rel="stylesheet" href="../css/styles.css?v=11">
 </head>
 <body>
 
@@ -18,36 +19,54 @@
       <img src="../assets/images/logo.jpg" alt="OTR Detailing logo">
       <span class="brand-text">OTR<small>Detailing</small></span>
     </a>
-    <h1>Owner Login</h1>
-    <p class="sub">Sign in to manage bookings</p>
+    <h1 id="login-title">Owner Login</h1>
+    <p class="sub" id="login-sub">Sign in to manage bookings</p>
 
     <div class="login-info" id="login-info"></div>
-    <div class="login-error" id="login-error">Incorrect username or password. Try again.</div>
+    <div class="login-error" id="login-error"></div>
 
+    <!-- sign in -->
     <form id="login-form" novalidate>
       <div class="form-row">
-        <label for="li-user">Username</label>
-        <input type="text" id="li-user" placeholder="gideon" required autocomplete="username">
+        <label for="li-email">Email</label>
+        <input type="email" id="li-email" placeholder="you@example.com" required autocomplete="username">
       </div>
       <div class="form-row">
         <label for="li-pass">Password</label>
         <div class="password-field">
           <input type="password" id="li-pass" placeholder="••••••••" required autocomplete="current-password">
-          <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Show password">
+          <button type="button" class="pw-toggle" data-target="li-pass" aria-label="Show password">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
-      <div class="form-row checkbox">
-        <input type="checkbox" id="li-remember">
-        <label for="li-remember">Remember me on this device</label>
-      </div>
       <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      <p class="login-alt"><button type="button" class="link-btn" id="forgot-link">Forgot your password?</button></p>
     </form>
 
-    <div class="admin-hint">
-      Demo credentials — username <code>gideon</code>, password <code>otr2026</code>
-    </div>
+    <!-- request reset -->
+    <form id="forgot-form" novalidate hidden>
+      <div class="form-row">
+        <label for="fp-email">Email</label>
+        <input type="email" id="fp-email" placeholder="you@example.com" required autocomplete="username">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Email Me a Reset Link</button>
+      <p class="login-alt"><button type="button" class="link-btn" id="back-link">Back to login</button></p>
+    </form>
+
+    <!-- set new password (arrives here from the email link) -->
+    <form id="reset-form" novalidate hidden>
+      <div class="form-row">
+        <label for="np-pass">New Password</label>
+        <div class="password-field">
+          <input type="password" id="np-pass" minlength="10" required autocomplete="new-password" placeholder="At least 10 characters">
+          <button type="button" class="pw-toggle" data-target="np-pass" aria-label="Show password">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Save Password &amp; Continue</button>
+    </form>
 
     <div class="center-btn-row" style="margin-top:24px">
       <a href="../index.html" class="btn btn-ghost btn-sm">← Back to Site</a>
@@ -55,75 +74,114 @@
   </div>
 </div>
 
-<script src="../js/store.js?v=1"></script>
-<script src="../js/main.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/config.js?v=2"></script>
+<script src="../js/api.js?v=2"></script>
+<script src="../js/main.js?v=3"></script>
 <script>
-  const loginForm = document.getElementById("login-form");
-  const loginError = document.getElementById("login-error");
-  const loginInfo = document.getElementById("login-info");
-  const userInput = document.getElementById("li-user");
-  const rememberInput = document.getElementById("li-remember");
-  const pwInput = document.getElementById("li-pass");
-  const pwToggle = document.getElementById("pw-toggle");
-  const submitBtn = loginForm.querySelector('button[type="submit"]');
+  (function () {
+    const loginForm = document.getElementById("login-form");
+    const forgotForm = document.getElementById("forgot-form");
+    const resetForm = document.getElementById("reset-form");
+    const errorEl = document.getElementById("login-error");
+    const infoEl = document.getElementById("login-info");
+    const title = document.getElementById("login-title");
+    const sub = document.getElementById("login-sub");
 
-  if (OTRStore.isAuthed()) {
-    window.location.href = "dashboard.html";
-  }
-
-  const rememberedUser = OTRStore.getRememberedUser();
-  if (rememberedUser) {
-    userInput.value = rememberedUser;
-    rememberInput.checked = true;
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("expired") === "1") {
-    loginInfo.textContent = "You were logged out after a period of inactivity. Please log in again.";
-    loginInfo.classList.add("show");
-  }
-
-  const eyeIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
-  const eyeOffIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a18.6 18.6 0 015.06-5.94M9.9 4.24A10.6 10.6 0 0112 4c7 0 11 7 11 7a18.7 18.7 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><path d="M1 1l22 22"/></svg>';
-
-  pwToggle.addEventListener("click", () => {
-    const showing = pwInput.type === "text";
-    pwInput.type = showing ? "password" : "text";
-    pwToggle.innerHTML = showing ? eyeIcon : eyeOffIcon;
-    pwToggle.setAttribute("aria-label", showing ? "Show password" : "Hide password");
-  });
-
-  let lockoutTimer = null;
-  function refreshLockoutState() {
-    if (OTRStore.isLockedOut()) {
-      const secs = OTRStore.getLockoutSecondsLeft();
-      submitBtn.disabled = true;
-      loginError.textContent = `Too many failed attempts. Try again in ${secs}s.`;
-      loginError.classList.add("show");
-      clearTimeout(lockoutTimer);
-      lockoutTimer = setTimeout(refreshLockoutState, 1000);
-      return true;
+    function show(form) {
+      [loginForm, forgotForm, resetForm].forEach((f) => (f.hidden = f !== form));
+      errorEl.classList.remove("show");
     }
-    submitBtn.disabled = false;
-    return false;
-  }
-  refreshLockoutState();
+    function error(msg) { errorEl.textContent = msg; errorEl.classList.add("show"); }
+    function info(msg) { infoEl.textContent = msg; infoEl.classList.add("show"); }
+    function busy(form, on, label) {
+      const btn = form.querySelector('button[type="submit"]');
+      if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+      btn.disabled = on;
+      btn.textContent = on ? label : btn.dataset.label;
+    }
 
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (refreshLockoutState()) return;
-    const user = userInput.value;
-    const pass = pwInput.value;
-    if (OTRStore.login(user, pass, rememberInput.checked)) {
-      window.location.href = "dashboard.html";
-    } else if (OTRStore.isLockedOut()) {
-      refreshLockoutState();
+    document.querySelectorAll(".pw-toggle").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const input = document.getElementById(btn.dataset.target);
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        btn.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      });
+    });
+
+    if (!OTRApi.configured) {
+      error("The booking backend isn't connected yet.");
+      loginForm.querySelector("button[type=submit]").disabled = true;
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("expired") === "1") info("You were logged out after a period of inactivity. Please log in again.");
+
+    // Arriving from a password-reset email link.
+    const isRecovery = /type=recovery/.test(window.location.hash);
+    if (isRecovery) {
+      title.textContent = "Set a New Password";
+      sub.textContent = "Choose a password you don't use anywhere else.";
+      show(resetForm);
     } else {
-      const left = OTRStore.getAttemptsLeft();
-      loginError.textContent = `Incorrect username or password. ${left} attempt${left === 1 ? "" : "s"} remaining before a temporary lockout.`;
-      loginError.classList.add("show");
+      OTRApi.isAdmin().then((ok) => { if (ok) window.location.href = "dashboard.html"; });
     }
-  });
+    OTRApi.onAuthChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        title.textContent = "Set a New Password";
+        show(resetForm);
+      }
+    });
+
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      busy(loginForm, true, "Signing in…");
+      try {
+        await OTRApi.signIn(document.getElementById("li-email").value.trim(), document.getElementById("li-pass").value);
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        error(err.message);
+        busy(loginForm, false);
+      }
+    });
+
+    document.getElementById("forgot-link").addEventListener("click", () => {
+      document.getElementById("fp-email").value = document.getElementById("li-email").value;
+      show(forgotForm);
+    });
+    document.getElementById("back-link").addEventListener("click", () => show(loginForm));
+
+    forgotForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("fp-email").value.trim();
+      if (!email) return error("Enter your email address.");
+      busy(forgotForm, true, "Sending…");
+      try {
+        await OTRApi.sendPasswordReset(email, window.location.href.split(/[?#]/)[0]);
+        info("If that email belongs to the owner account, a reset link is on its way. Check your inbox (and spam).");
+        show(loginForm);
+      } catch (err) {
+        error(err.message);
+      }
+      busy(forgotForm, false);
+    });
+
+    resetForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const pass = document.getElementById("np-pass").value;
+      if (pass.length < 10) return error("Use at least 10 characters.");
+      busy(resetForm, true, "Saving…");
+      try {
+        await OTRApi.updatePassword(pass);
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        error(err.message);
+        busy(resetForm, false);
+      }
+    });
+  })();
 </script>
 </body>
 </html>

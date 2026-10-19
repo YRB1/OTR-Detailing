@@ -1,68 +1,76 @@
 /* ==========================================================================
-   OTR Detailing — admin settings page
+   OTR Detailing — admin settings (business details, prices, password)
+   Prices saved here are what customers are charged at checkout.
    ========================================================================== */
 
-(function () {
+(async function () {
   "use strict";
 
-  if (!OTRStore.isAuthed()) {
-    window.location.href = "login.html";
-    return;
+  if (!(await OTRApi.requireAdmin())) return;
+
+  const toast = (m) => window.otrToast && window.otrToast(m);
+  const $ = (id) => document.getElementById(id);
+  const form = $("settings-form");
+
+  async function load() {
+    try {
+      const [s, services] = await Promise.all([OTRApi.getSettings(), OTRApi.getServices()]);
+      $("s-name").value = s.business_name;
+      $("s-email").value = s.email;
+      $("s-phone").value = s.phone;
+      $("s-area").value = s.area;
+      $("s-hours").value = s.hours;
+      $("s-cancel-fee").value = s.cancellation_fee_pence / 100;
+      services.forEach((svc) => {
+        const input = $("s-price-" + svc.id);
+        if (input) input.value = svc.price_pence / 100;
+      });
+    } catch (err) {
+      toast("Couldn't load settings: " + err.message);
+    }
   }
 
-  document.getElementById("logout-btn").addEventListener("click", () => {
-    OTRStore.logout();
-    window.location.href = "login.html";
-  });
-
-  const form = document.getElementById("settings-form");
-  const fields = {
-    businessName: document.getElementById("s-name"),
-    email: document.getElementById("s-email"),
-    phone: document.getElementById("s-phone"),
-    area: document.getElementById("s-area"),
-    hours: document.getElementById("s-hours"),
-    priceInterior: document.getElementById("s-price-interior"),
-    priceExterior: document.getElementById("s-price-exterior"),
-    priceFull: document.getElementById("s-price-full"),
-    cancelFee: document.getElementById("s-cancel-fee"),
-  };
-
-  function applySettings(s) {
-    fields.businessName.value = s.businessName;
-    fields.email.value = s.email;
-    fields.phone.value = s.phone;
-    fields.area.value = s.area;
-    fields.hours.value = s.hours;
-    fields.priceInterior.value = s.prices.interior;
-    fields.priceExterior.value = s.prices.exterior;
-    fields.priceFull.value = s.prices.full;
-    fields.cancelFee.value = s.cancellationFee;
-  }
-
-  applySettings(OTRStore.getSettings());
-
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    OTRStore.saveSettings({
-      businessName: fields.businessName.value.trim(),
-      email: fields.email.value.trim(),
-      phone: fields.phone.value.trim(),
-      area: fields.area.value.trim(),
-      hours: fields.hours.value.trim(),
-      cancellationFee: Number(fields.cancelFee.value) || 0,
-      prices: {
-        interior: Number(fields.priceInterior.value) || 0,
-        exterior: Number(fields.priceExterior.value) || 0,
-        full: Number(fields.priceFull.value) || 0,
-      },
-    });
-    window.otrToast && window.otrToast("Settings saved.");
+    if (!form.reportValidity()) return;
+    const pence = (id) => Math.round(Number($(id).value) * 100);
+    const btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    try {
+      await Promise.all([
+        OTRApi.saveSettings({
+          business_name: $("s-name").value.trim(),
+          email: $("s-email").value.trim(),
+          phone: $("s-phone").value.trim(),
+          area: $("s-area").value.trim(),
+          hours: $("s-hours").value.trim(),
+          cancellation_fee_pence: pence("s-cancel-fee"),
+        }),
+        OTRApi.saveServicePrice("interior", pence("s-price-interior")),
+        OTRApi.saveServicePrice("exterior", pence("s-price-exterior")),
+        OTRApi.saveServicePrice("full", pence("s-price-full")),
+      ]);
+      toast("Settings saved — new prices apply to bookings straight away.");
+    } catch (err) {
+      toast("Couldn't save: " + err.message);
+    }
+    btn.disabled = false;
   });
 
-  document.getElementById("reset-btn").addEventListener("click", () => {
-    localStorage.removeItem("otr_settings");
-    applySettings(OTRStore.getSettings());
-    window.otrToast && window.otrToast("Settings reset to defaults.");
+  $("reset-btn").addEventListener("click", load);
+
+  $("password-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const pass = $("s-new-pass").value;
+    if (pass.length < 10) return toast("Use at least 10 characters.");
+    try {
+      await OTRApi.updatePassword(pass);
+      $("s-new-pass").value = "";
+      toast("Password updated.");
+    } catch (err) {
+      toast("Couldn't update password: " + err.message);
+    }
   });
+
+  load();
 })();

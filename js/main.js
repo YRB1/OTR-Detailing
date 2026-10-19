@@ -83,6 +83,46 @@
     counters.forEach((el) => countIo.observe(el));
   }
 
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Hero slideshow (crossfade) ---------- */
+  const heroSlides = Array.from(document.querySelectorAll(".hero-slide"));
+  if (heroSlides.length > 1 && !reduceMotion) {
+    let heroIndex = 0;
+    setInterval(() => {
+      if (document.hidden) return;
+      heroSlides[heroIndex].classList.remove("active");
+      heroIndex = (heroIndex + 1) % heroSlides.length;
+      const next = heroSlides[heroIndex];
+      next.loading = "eager";
+      next.classList.add("active");
+      // warm the one after so it's ready before its turn
+      heroSlides[(heroIndex + 1) % heroSlides.length].loading = "eager";
+    }, 5500);
+  }
+
+  /* ---------- Reels: play while on screen, tap to pause ---------- */
+  const reels = document.querySelectorAll(".reel video");
+  if (reels.length) {
+    const reelIo = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const v = entry.target;
+          if (entry.isIntersecting && !reduceMotion && !v.dataset.userPaused) v.play().catch(() => {});
+          else v.pause();
+        });
+      },
+      { threshold: 0.5 }
+    );
+    reels.forEach((v) => {
+      reelIo.observe(v);
+      v.closest(".reel").addEventListener("click", () => {
+        if (v.paused) { delete v.dataset.userPaused; v.play().catch(() => {}); }
+        else { v.dataset.userPaused = "1"; v.pause(); }
+      });
+    });
+  }
+
   /* ---------- Generic carousel factory ---------- */
   function initCarousel(root, { auto = false, interval = 4500 } = {}) {
     const track = root.querySelector(".carousel-track, .reviews-track");
@@ -158,11 +198,13 @@
 
     function loadCar(car) {
       const data = JSON.parse(car.getAttribute("data-images"));
+      // Photos are mostly portrait: show the whole shot over a blurred fill.
       track.innerHTML = data
         .map(
-          (src, i) =>
+          (src) =>
             `<div class="carousel-slide" data-src="${src.src}">
-               <img src="${src.src}" alt="${src.alt}" loading="lazy">
+               <img class="slide-fill" src="${src.src}" alt="" aria-hidden="true" loading="lazy">
+               <img class="slide-photo" src="${src.src}" alt="${src.alt}" loading="lazy">
                <div class="slide-caption">${src.alt}</div>
              </div>`
         )
@@ -249,7 +291,7 @@
   function bindLightbox() {
     const slides = Array.from(document.querySelectorAll(".carousel-slide"));
     const images = slides.map((slide) => {
-      const img = slide.querySelector("img") || (slide.tagName === "IMG" ? slide : null);
+      const img = slide.querySelector("img.slide-photo") || slide.querySelector("img");
       return { src: img ? img.src : slide.getAttribute("data-src"), alt: img ? img.alt : "" };
     });
     slides.forEach((slide, i) => {
@@ -397,21 +439,155 @@
     return '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
   }
 
-  /* ---------- Contact form (mock submit) ---------- */
+  /* ---------- Backend helpers (marketing pages use plain fetch, no SDK) ---------- */
+  const cfg = window.OTR_CONFIG || {};
+  const backendReady = !!(cfg.supabaseUrl && cfg.supabaseAnonKey);
+  const backendHeaders = { apikey: cfg.supabaseAnonKey, Authorization: "Bearer " + cfg.supabaseAnonKey };
+
+  /* ---------- Live prices (owner can change them in admin Settings) ---------- */
+  if (backendReady && document.querySelector("[data-price-for], [data-price-num], .sticky-cta .sc-price")) {
+    fetch(cfg.supabaseUrl + "/rest/v1/services?select=id,price_pence&active=eq.true", { headers: backendHeaders })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows) => {
+        if (!rows.length) return;
+        const fmt = (pence) => { const p = pence / 100; return Number.isInteger(p) ? String(p) : p.toFixed(2); };
+        const byId = Object.fromEntries(rows.map((r) => [r.id, r.price_pence]));
+        document.querySelectorAll("[data-price-for]").forEach((el) => {
+          const p = byId[el.getAttribute("data-price-for")];
+          if (p != null) el.textContent = "£" + fmt(p);
+        });
+        document.querySelectorAll("[data-price-num]").forEach((el) => {
+          const p = byId[el.getAttribute("data-price-num")];
+          if (p != null) el.textContent = fmt(p);
+        });
+        const cheapest = Math.min(...rows.map((r) => r.price_pence));
+        document.querySelectorAll(".sticky-cta .sc-price").forEach((el) => (el.textContent = "From £" + fmt(cheapest)));
+      })
+      .catch(() => {});
+  }
+
+  /* ---------- Reviews (approved only) ---------- */
+  const reviewLists = document.querySelectorAll("[data-reviews-list]");
+  if (reviewLists.length && backendReady) {
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const initials = (n) => String(n).split(" ").filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("");
+    fetch(cfg.supabaseUrl + "/rest/v1/rpc/get_approved_reviews", {
+      method: "POST",
+      headers: Object.assign({ "Content-Type": "application/json" }, backendHeaders),
+      body: JSON.stringify({ max_rows: 100 }),
+    })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((reviews) => {
+        reviewLists.forEach((list) => {
+          const shown = reviews.slice(0, Number(list.getAttribute("data-limit")) || 100);
+          list.innerHTML = shown
+            .map((r) => `
+              <article class="review-tile">
+                <div class="stars" aria-label="${r.rating} out of 5 stars">${"★".repeat(r.rating)}<span class="stars-off">${"★".repeat(5 - r.rating)}</span></div>
+                <p class="quote">"${esc(r.comment)}"</p>
+                <div class="author">
+                  <span class="avatar">${esc(initials(r.name))}</span>
+                  <div>
+                    <div class="author-name">${esc(r.name)}</div>
+                    <div class="author-meta">${esc([r.vehicle, r.area].filter(Boolean).join(" · ") || new Date(r.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }))}</div>
+                  </div>
+                </div>
+              </article>`)
+            .join("");
+          const empty = list.parentElement.querySelector("[data-reviews-empty]");
+          if (empty) empty.hidden = shown.length > 0;
+        });
+        const summary = document.getElementById("review-summary");
+        if (summary && reviews.length) {
+          const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+          summary.innerHTML = `<span class="stars">★★★★★</span> <strong>${avg.toFixed(1)}</strong> from ${reviews.length} review${reviews.length === 1 ? "" : "s"}`;
+          summary.hidden = false;
+        }
+      })
+      .catch(() => {});
+  }
+
+  const reviewForm = document.querySelector("#review-form");
+  if (reviewForm) {
+    reviewForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const rating = reviewForm.querySelector('input[name="rating"]:checked');
+      document.getElementById("star-error").hidden = !!rating;
+      let valid = !!rating;
+      [["rv-name", (v) => v.trim().length > 0], ["rv-comment", (v) => v.trim().length >= 10]].forEach(([id, test]) => {
+        const el = document.getElementById(id);
+        const ok = test(el.value);
+        el.closest(".form-row").classList.toggle("invalid", !ok);
+        if (!ok) valid = false;
+      });
+      if (!valid) return;
+      if (!backendReady) return window.otrToast("Reviews can't be sent right now — please try again later.");
+
+      const btn = reviewForm.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      try {
+        const f = reviewForm.elements;
+        const res = await fetch(cfg.supabaseUrl + "/functions/v1/submit-review", {
+          method: "POST",
+          headers: Object.assign({ "Content-Type": "application/json" }, backendHeaders),
+          body: JSON.stringify({
+            rating: Number(rating.value), name: f.name.value, vehicle: f.vehicle.value, area: f.area.value,
+            email: f.email.value, comment: f.comment.value, company: f.company.value,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || "Couldn't send your review. Please try again.");
+        reviewForm.innerHTML = '<div class="review-thanks"><div class="confirm-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><h3>Thank you!</h3><p>Your review has been sent and will appear once it\'s been checked.</p></div>';
+      } catch (err) {
+        window.otrToast(err.message);
+        btn.disabled = false;
+        btn.textContent = "Submit Review";
+      }
+    });
+  }
+
+  /* ---------- Contact form ---------- */
   const contactForm = document.querySelector("#contact-form");
   if (contactForm) {
-    contactForm.addEventListener("submit", (e) => {
+    contactForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       let valid = true;
       contactForm.querySelectorAll("[required]").forEach((field) => {
         const row = field.closest(".form-row");
-        const ok = field.type === "checkbox" ? field.checked : field.value.trim().length > 0;
+        const ok = field.type === "email" ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim()) : field.value.trim().length > 0;
         row.classList.toggle("invalid", !ok);
         if (!ok) valid = false;
       });
       if (!valid) return;
-      contactForm.reset();
-      window.otrToast("Message sent — Gideon will reply within 24 hours.");
+
+      const fallback = `Couldn't send right now — please email ${cfg.contactEmail || "us"} or message us on Instagram.`;
+      if (!backendReady) return window.otrToast(fallback);
+
+      const btn = contactForm.querySelector('button[type="submit"]');
+      const label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      try {
+        const res = await fetch(cfg.supabaseUrl + "/functions/v1/contact", {
+          method: "POST",
+          headers: Object.assign({ "Content-Type": "application/json" }, backendHeaders),
+          body: JSON.stringify({
+            name: contactForm.elements.name.value,
+            email: contactForm.elements.email.value,
+            message: contactForm.elements.message.value,
+            company: contactForm.elements.company ? contactForm.elements.company.value : "",
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || fallback);
+        contactForm.reset();
+        window.otrToast("Message sent — Gideon will reply within 24 hours.");
+      } catch (err) {
+        window.otrToast(err.message || fallback);
+      }
+      btn.disabled = false;
+      btn.textContent = label;
     });
   }
 
@@ -423,17 +599,16 @@
   });
 
   /* ---------- Admin session idle timeout ----------
-     Only runs on authenticated admin pages (they load store.js before this
-     file). Not a substitute for a real server-side session — see the note
-     in store.js — but a reasonable client-side safeguard for this mockup. */
-  if (document.querySelector(".admin-shell") && typeof OTRStore !== "undefined" && OTRStore.isAuthed()) {
+     Signs the owner out after a period of inactivity on admin pages, so a
+     dashboard left open on a shared device doesn't stay logged in. */
+  if (document.querySelector(".admin-shell") && typeof OTRApi !== "undefined") {
     let idleTimer;
     function resetIdleTimer() {
       clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => {
-        OTRStore.logout();
+      idleTimer = setTimeout(async () => {
+        await OTRApi.signOut();
         window.location.href = "login.html?expired=1";
-      }, OTRStore.IDLE_TIMEOUT_MS);
+      }, OTRApi.IDLE_TIMEOUT_MS);
     }
     ["mousemove", "keydown", "click", "scroll", "touchstart"].forEach((evt) =>
       document.addEventListener(evt, resetIdleTimer, { passive: true })
@@ -448,7 +623,7 @@
     const onAdminPage = !!document.querySelector(".admin-shell, .admin-login-wrap");
     const prefix = onAdminPage ? "../" : "";
     banner.innerHTML = `
-      <p>We use essential local storage to run bookings and keep you signed in — no advertising or tracking cookies. See our <a href="${prefix}cookies.html">Cookie Policy</a>.</p>
+      <p>We only use essential storage — to keep the owner signed in and to take payments securely through Stripe. No advertising or tracking cookies. See our <a href="${prefix}cookies.html">Cookie Policy</a>.</p>
       <div class="cookie-actions">
         <a href="${prefix}cookies.html" class="btn btn-ghost btn-sm">Learn More</a>
         <button type="button" class="btn btn-primary btn-sm" id="cookie-accept">Got It</button>

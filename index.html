@@ -3,13 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OTR Detailing — Mobile Car Detailing in Coventry</title>
-<meta name="description" content="OTR Detailing — On the road, off the showroom clean. Mobile vehicle detailing across Coventry and surrounding areas. Book your interior, exterior or full detail today.">
-<link rel="icon" href="assets/images/logo.jpg">
+<title>Mobile Car Valeting &amp; Detailing in Coventry | OTR Detailing</title>
+<meta name="description" content="Mobile car valeting and detailing across Coventry — we come to your driveway. Exterior from £20, interior £30, full detail £40. Book and pay online in minutes.">
+<link rel="canonical" href="https://yrb1.github.io/OTR-Detailing/">
+<meta name="theme-color" content="#09090a">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OTR Detailing">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="OTR Detailing — Mobile Car Detailing in Coventry">
+<meta property="og:description" content="On the road, off the showroom clean. Snow foam, hand wash and full interior cleans at your door. Book online.">
+<meta property="og:url" content="https://yrb1.github.io/OTR-Detailing/">
+<meta property="og:image" content="https://yrb1.github.io/OTR-Detailing/assets/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/images/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+<link rel="preload" as="image" href="assets/images/audi-q2-front.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=9">
+<link rel="stylesheet" href="css/styles.css?v=11">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutoWash",
+  "name": "OTR Detailing",
+  "slogan": "On the road, off the showroom clean",
+  "description": "Mobile car valeting and detailing service covering Coventry and surrounding areas.",
+  "url": "https://yrb1.github.io/OTR-Detailing/",
+  "image": "https://yrb1.github.io/OTR-Detailing/assets/images/og-image.jpg",
+  "logo": "https://yrb1.github.io/OTR-Detailing/assets/images/icon-512.png",
+  "email": "otr.detailinguk@gmail.com",
+  "priceRange": "£20–£40",
+  "currenciesAccepted": "GBP",
+  "paymentAccepted": "Credit Card, Debit Card, Apple Pay, Google Pay",
+  "address": { "@type": "PostalAddress", "addressLocality": "Coventry", "addressRegion": "West Midlands", "addressCountry": "GB" },
+  "areaServed": { "@type": "City", "name": "Coventry" },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "opens": "08:00", "closes": "18:00"
+  }],
+  "sameAs": ["https://www.instagram.com/otrdetailing.uk/"],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Mobile detailing services",
+    "itemListElement": [
+      { "@type": "Offer", "price": "20.00", "priceCurrency": "GBP", "itemOffered": { "@type": "Service", "name": "Exterior Clean", "description": "Snow foam, two-bucket hand wash, wheels, tyres and glass." } },
+      { "@type": "Offer", "price": "30.00", "priceCurrency": "GBP", "itemOffered": { "@type": "Service", "name": "Interior Clean", "description": "Full vacuum, panels, steering wheel, pedals, glass and deodorising." } },
+      { "@type": "Offer", "price": "40.00", "priceCurrency": "GBP", "itemOffered": { "@type": "Service", "name": "Full Interior & Exterior Detail", "description": "Everything inside and out." } }
+    ]
+  }
+}
+</script>
 </head>
 <body id="top">
 
@@ -25,8 +72,9 @@
       <li><a href="about.html">About</a></li>
       <li><a href="index.html#services">Services</a></li>
       <li><a href="index.html#gallery">Our Work</a></li>
-      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
       <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener">Instagram</a></li>
       <li class="mobile-only"><a href="booking.html">Book Now</a></li>
     </ul>
     <div class="nav-actions">
@@ -38,9 +86,13 @@
 
 <!-- ================= HERO ================= -->
 <header class="hero">
-  <video class="hero-video" autoplay muted loop playsinline poster="assets/images/mercedes-1.jpg">
-    <source src="assets/video/hero.mp4" type="video/mp4">
-  </video>
+  <div class="hero-slides" aria-hidden="true">
+    <img class="hero-slide active" src="assets/images/audi-q2-front.jpg" alt="" style="--pos:50% 66%" fetchpriority="high">
+    <img class="hero-slide" src="assets/images/ibiza-blue-front.jpg" alt="" style="--pos:50% 62%" loading="lazy">
+    <img class="hero-slide" src="assets/images/fiesta-grey-foam.jpg" alt="" style="--pos:50% 48%" loading="lazy">
+    <img class="hero-slide" src="assets/images/mercedes-wheel.jpg" alt="" style="--pos:50% 66%" loading="lazy">
+    <img class="hero-slide" src="assets/images/mercedes-dash.jpg" alt="" style="--pos:50% 55%" loading="lazy">
+  </div>
   <div class="hero-overlay"></div>
   <div class="container hero-content">
     <div class="hero-badge"><span class="dot"></span> Booking now for Coventry &amp; surrounding areas</div>
@@ -51,9 +103,9 @@
       <a href="#services" class="btn btn-ghost">View Services</a>
     </div>
     <div class="hero-stats">
-      <div class="stat"><b><span data-count="113">0</span>+</b><span>Instagram Followers</span></div>
-      <div class="stat"><b><span data-count="5" data-decimals="1">0</span></b><span>Average Rating</span></div>
-      <div class="stat"><b><span data-count="20" data-suffix="+">0</span></b><span>Mobile, We Come To You</span></div>
+      <div class="stat"><b>£<span data-price-num="exterior">20</span></b><span>Prices From</span></div>
+      <div class="stat"><b><span data-count="100" data-suffix="%">0</span></b><span>Mobile — We Come To You</span></div>
+      <div class="stat"><b>Mon–Sat</b><span>8am – 6pm</span></div>
     </div>
   </div>
   <div class="scroll-cue"><span>Scroll</span><div class="wheel"></div></div>
@@ -64,7 +116,7 @@
   <div class="container split">
     <div class="reveal-scale">
       <div class="media-frame">
-        <img src="assets/images/mercedes-4.jpg" alt="OTR Detailing valeting a Mercedes C220d interior">
+        <img src="assets/images/mercedes-4.jpg" alt="Gideon detailing the interior of a Mercedes C-Class" loading="lazy">
         <span class="frame-tag">Every detail, done with care</span>
       </div>
     </div>
@@ -102,7 +154,7 @@
 <!-- ================= STATS STRIP ================= -->
 <div class="stats-strip">
   <div class="container stats-grid">
-    <div class="reveal"><div class="num" data-count="113">0</div><div class="lbl">Followers on Instagram</div></div>
+    <div class="reveal"><div class="num" data-count="6" data-suffix=" Days">0</div><div class="lbl">Open Monday to Saturday</div></div>
     <div class="reveal"><div class="num" data-count="100" data-suffix="%">0</div><div class="lbl">Mobile — We Come To You</div></div>
     <div class="reveal"><div class="num" data-count="3" data-suffix=" Levels">0</div><div class="lbl">Interior · Exterior · Full</div></div>
     <div class="reveal"><div class="num" data-count="24" data-suffix="hr">0</div><div class="lbl">Cancellation Notice</div></div>
@@ -124,7 +176,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2M3 12h18"/></svg>
         </div>
         <h3>Interior Clean</h3>
-        <div class="price">£30</div>
+        <div class="price" data-price-for="interior">£30</div>
         <div class="price-note">Deep clean, inside out</div>
         <ul>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Full interior vacuum</li>
@@ -145,7 +197,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z"/></svg>
         </div>
         <h3>Full Interior &amp; Exterior</h3>
-        <div class="price">£40</div>
+        <div class="price" data-price-for="full">£40</div>
         <div class="price-note">The Ultimate Clean</div>
         <ul>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Everything in Interior Clean</li>
@@ -162,7 +214,7 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M4 12a8 8 0 0016 0M4 12a8 8 0 0116-0"/></svg>
         </div>
         <h3>Exterior Clean</h3>
-        <div class="price">£20</div>
+        <div class="price" data-price-for="exterior">£20</div>
         <div class="price-note">Snow foam &amp; hand wash</div>
         <ul>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Pre-wash</li>
@@ -192,29 +244,32 @@
 
     <div class="car-tabs reveal">
       <button class="car-tab active" data-images='[
+        {"src":"assets/images/mercedes-1.jpg","alt":"White Mercedes C-Class Coupe AMG after a full exterior detail"},
+        {"src":"assets/images/mercedes-wheel.jpg","alt":"Mercedes C-Class Coupe AMG alloy wheel and rear quarter, cleaned and dressed"},
+        {"src":"assets/images/mercedes-dash.jpg","alt":"Mercedes C-Class AMG dashboard and centre console after an interior clean"},
+        {"src":"assets/images/mercedes-cabin.jpg","alt":"Mercedes C-Class cabin, leather seats and dash fully detailed"},
+        {"src":"assets/images/mercedes-4.jpg","alt":"Gideon deep-cleaning the Mercedes C-Class interior"}
+      ]'>Mercedes C-Class</button>
+      <button class="car-tab" data-images='[
+        {"src":"assets/images/ibiza-blue-front.jpg","alt":"Blue Seat Ibiza FR after a full exterior detail, glossy paintwork"},
+        {"src":"assets/images/ibiza-blue-interior.jpg","alt":"Seat Ibiza FR interior, seats and dash cleaned"}
+      ]'>Seat Ibiza FR</button>
+      <button class="car-tab" data-images='[
+        {"src":"assets/images/fiesta-grey-foam.jpg","alt":"Grey Ford Fiesta covered in snow foam pre-wash"},
+        {"src":"assets/images/fiesta-grey-front.jpg","alt":"Grey Ford Fiesta front end after a full exterior clean"},
+        {"src":"assets/images/fiesta-grey-side.jpg","alt":"Grey Ford Fiesta side profile, paintwork gleaming"}
+      ]'>Ford Fiesta</button>
+      <button class="car-tab" data-images='[
+        {"src":"assets/images/ibiza-grey-rear.jpg","alt":"Grey Seat Ibiza FR rear after an exterior detail"},
+        {"src":"assets/images/seat-1.jpg","alt":"Grey Seat Ibiza front end, glossy paintwork"},
+        {"src":"assets/images/seat-2.jpg","alt":"Grey Seat Ibiza side profile after a full detail"}
+      ]'>Ibiza FR · Grey</button>
+      <button class="car-tab" data-images='[
+        {"src":"assets/images/skoda-2.jpg","alt":"Skoda Fabia after a full exterior detail, deep blue finish"},
         {"src":"assets/images/skoda-1.jpg","alt":"Skoda Fabia covered in snow foam pre-wash"},
-        {"src":"assets/images/skoda-2.jpg","alt":"Skoda Fabia after full exterior detail, deep blue finish"},
         {"src":"assets/images/skoda-3.jpg","alt":"Skoda Fabia rear three-quarter, glass and paintwork detailed"},
         {"src":"assets/images/skoda-4.jpg","alt":"Skoda Fabia alloy wheel cleaned and dressed"}
       ]'>Skoda Fabia</button>
-      <button class="car-tab" data-images='[
-        {"src":"assets/images/mercedes-1.jpg","alt":"Mercedes-Benz C220d Coupe exterior detail, driveway finish"},
-        {"src":"assets/images/mercedes-2.jpg","alt":"Mercedes-Benz C220d AMG interior fully detailed"},
-        {"src":"assets/images/mercedes-3.jpg","alt":"Mercedes-Benz C220d cabin, dash and seats detailed"},
-        {"src":"assets/images/mercedes-4.jpg","alt":"OTR Detailing working on the Mercedes-Benz C220d interior"}
-      ]'>Mercedes C220d</button>
-      <button class="car-tab" data-images='[
-        {"src":"assets/images/seat-1.jpg","alt":"Seat Ibiza FR front detail, glossy paintwork"},
-        {"src":"assets/images/seat-2.jpg","alt":"Seat Ibiza FR side profile after full detail"},
-        {"src":"assets/images/seat-3.jpg","alt":"Seat Ibiza FR rear three-quarter detail"},
-        {"src":"assets/images/seat-4.jpg","alt":"Seat Ibiza FR alloy wheel cleaned to a shine"}
-      ]'>Seat Ibiza FR</button>
-      <button class="car-tab" data-images='[
-        {"src":"assets/images/fiesta-1.jpg","alt":"Ford Fiesta front end detailed, learner plates"},
-        {"src":"assets/images/fiesta-2.jpg","alt":"Ford Fiesta exterior finished detail"},
-        {"src":"assets/images/fiesta-3.jpg","alt":"Ford Fiesta side profile, paintwork corrected"},
-        {"src":"assets/images/fiesta-4.jpg","alt":"Ford Fiesta alloy wheel, black finish detailed"}
-      ]'>Ford Fiesta</button>
     </div>
 
     <div class="carousel reveal-scale">
@@ -228,6 +283,37 @@
         </button>
         <div class="carousel-dots"></div>
       </div>
+    </div>
+
+    <div class="reels-head reveal">
+      <h3>Watch the work</h3>
+      <a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener" class="reels-link">More reels on Instagram →</a>
+    </div>
+    <div class="reels-grid stagger">
+      <figure class="reel">
+        <video muted loop playsinline preload="none" poster="assets/video/reels/skoda-wash.jpg" aria-label="Skoda Fabia wheels, snow foam and hand wash">
+          <source src="assets/video/reels/skoda-wash.mp4" type="video/mp4">
+        </video>
+        <figcaption>Wheels first, then foam — Skoda Fabia</figcaption>
+      </figure>
+      <figure class="reel">
+        <video muted loop playsinline preload="none" poster="assets/video/reels/mercedes-cla-snow-foam.jpg" aria-label="Mercedes CLA AMG covered in snow foam">
+          <source src="assets/video/reels/mercedes-cla-snow-foam.mp4" type="video/mp4">
+        </video>
+        <figcaption>Snow foam — Mercedes CLA AMG</figcaption>
+      </figure>
+      <figure class="reel">
+        <video muted loop playsinline preload="none" poster="assets/video/reels/audi-q2-reveal.jpg" aria-label="Black Audi Q2 paintwork reveal after a wash">
+          <source src="assets/video/reels/audi-q2-reveal.mp4" type="video/mp4">
+        </video>
+        <figcaption>The finish — Audi Q2</figcaption>
+      </figure>
+      <figure class="reel">
+        <video muted loop playsinline preload="none" poster="assets/video/reels/audi-a1-interior.jpg" aria-label="Audi A1 interior walkthrough after an interior clean">
+          <source src="assets/video/reels/audi-a1-interior.mp4" type="video/mp4">
+        </video>
+        <figcaption>Interior clean — Audi A1</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -298,40 +384,13 @@
       <div class="eyebrow" style="justify-content:center">Reviews</div>
       <h2 class="section-title">What Coventry's <span>saying.</span></h2>
     </div>
-    <div class="reviews-wrap reveal-scale carousel">
-      <div class="reviews-track-wrap">
-        <div class="reviews-track">
-          <div class="review-slide">
-            <div class="review-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">"Booked the full detail on my Fabia and honestly it came back looking better than the day I bought it. Turned up on time, dead friendly, and the interior smelled incredible after."</p>
-              <div class="author"><span class="avatar">AC</span><div><div class="author-name">Amelia Clarke</div><div class="author-meta">Skoda Fabia · Coventry</div></div></div>
-            </div>
-          </div>
-          <div class="review-slide">
-            <div class="review-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">"Had my C220d done before selling it — Gideon was so careful around the AMG trim and the wheels came up brand new. Worth every penny, would recommend to anyone."</p>
-              <div class="author"><span class="avatar">DO</span><div><div class="author-name">Daniel Osei</div><div class="author-meta">Mercedes C220d · Cheylesmore</div></div></div>
-            </div>
-          </div>
-          <div class="review-slide">
-            <div class="review-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">"Dog hair everywhere on the back seats and I genuinely thought it was a lost cause. Interior clean sorted it completely — vents, pedals, all of it. Booking on Instagram was so easy too."</p>
-              <div class="author"><span class="avatar">PS</span><div><div class="author-name">Priya Shah</div><div class="author-meta">Seat Ibiza FR · Binley</div></div></div>
-            </div>
-          </div>
-          <div class="review-slide">
-            <div class="review-card">
-              <div class="stars">★★★★★</div>
-              <p class="quote">"My little Fiesta is nearly 15 years old and OTR still made it shine like new. Mobile service meant I didn't even need to leave the house — turned up, got it done, gone."</p>
-              <div class="author"><span class="avatar">JW</span><div><div class="author-name">Jack Wheeler</div><div class="author-meta">Ford Fiesta · Stoke Green</div></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="reviews-dots"></div>
+    <div class="review-grid" data-reviews-list data-limit="3"></div>
+    <div class="review-empty" data-reviews-empty hidden>
+      <p>We're new to online reviews — had a detail with us? Be the first to leave one.</p>
+    </div>
+    <div class="center-btn-row reveal" style="margin-top:34px">
+      <a href="reviews.html" class="btn btn-ghost">Read All Reviews</a>
+      <a href="reviews.html#leave-review" class="btn btn-primary">Leave a Review</a>
     </div>
   </div>
 </section>
@@ -342,7 +401,7 @@
     <div class="insta-strip reveal-scale">
       <h3>See more on <span class="gradient-text">@otrdetailing.uk</span></h3>
       <p>Follow along for before &amp; afters, booking updates and behind-the-scenes detailing.</p>
-      <a href="https://instagram.com/otrdetailing.uk" target="_blank" rel="noopener" class="btn btn-primary">
+      <a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener" class="btn btn-primary">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
         Follow on Instagram
       </a>
@@ -381,7 +440,7 @@
       </div>
       <div class="faq-item reveal">
         <button class="faq-q" type="button">How do I pay?<span class="plus"></span></button>
-        <div class="faq-a-wrap"><div class="faq-a">You can pay securely online when you book, or arrange payment with Gideon directly. Full pricing is listed on our <a href="index.html#services" style="color:var(--blue-light)">Services</a> section.</div></div>
+        <div class="faq-a-wrap"><div class="faq-a">You pay securely online when you book — card, Apple Pay or Google Pay, processed by Stripe. Full pricing is listed on our <a href="index.html#services" style="color:var(--blue-light)">Services</a> section.</div></div>
       </div>
     </div>
   </div>
@@ -415,6 +474,10 @@
             <textarea id="c-msg" name="message" required placeholder="Tell us about your vehicle and what you're after..."></textarea>
             <span class="error">Please enter a message</span>
           </div>
+          <div class="visually-hidden" aria-hidden="true">
+            <label for="c-company">Company</label>
+            <input type="text" id="c-company" name="company" tabindex="-1" autocomplete="off">
+          </div>
           <button type="submit" class="btn btn-primary btn-block">Send Message</button>
         </form>
         <ul class="contact-info-list">
@@ -444,7 +507,7 @@
         </a>
         <p>On the road, off the showroom clean. Mobile vehicle detailing across Coventry &amp; surrounding areas.</p>
         <div class="social-row">
-          <a href="https://instagram.com/otrdetailing.uk" target="_blank" rel="noopener" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
           <a href="mailto:otr.detailinguk@gmail.com" aria-label="Email"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg></a>
         </div>
       </div>
@@ -454,16 +517,15 @@
           <li><a href="about.html">About Us</a></li>
           <li><a href="index.html#services">Services</a></li>
           <li><a href="index.html#gallery">Our Work</a></li>
-          <li><a href="index.html#reviews">Reviews</a></li>
           <li><a href="index.html#faq">FAQ</a></li>
         </ul>
       </div>
       <div>
         <h5>Services</h5>
         <ul>
-          <li><a href="booking.html?service=interior">Interior Clean — £30</a></li>
-          <li><a href="booking.html?service=exterior">Exterior Clean — £20</a></li>
-          <li><a href="booking.html?service=full">Full Detail — £40</a></li>
+          <li><a href="booking.html?service=interior">Interior Clean — <span data-price-for="interior">£30</span></a></li>
+          <li><a href="booking.html?service=exterior">Exterior Clean — <span data-price-for="exterior">£20</span></a></li>
+          <li><a href="booking.html?service=full">Full Detail — <span data-price-for="full">£40</span></a></li>
         </ul>
       </div>
       <div>
@@ -473,6 +535,7 @@
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="cookies.html">Cookie Policy</a></li>
           <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener">Instagram</a></li>
           <li><a href="admin/login.html">Owner Login</a></li>
         </ul>
       </div>
@@ -484,6 +547,7 @@
   </div>
 </footer>
 
-<script src="js/main.js?v=1"></script>
+<script src="js/config.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 </body>
 </html>

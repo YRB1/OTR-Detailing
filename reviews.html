@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://yrb1.github.io/OTR-Detailing/reviews.html">
+<meta name="theme-color" content="#09090a">
+<meta property="og:site_name" content="OTR Detailing">
+<meta property="og:title" content="Customer Reviews — OTR Detailing, Coventry">
+<meta property="og:image" content="https://yrb1.github.io/OTR-Detailing/assets/images/og-image.jpg">
+<meta property="og:url" content="https://yrb1.github.io/OTR-Detailing/reviews.html">
+<title>Customer Reviews | OTR Detailing, Mobile Car Valeting Coventry</title>
+<meta name="description" content="Read genuine reviews from OTR Detailing customers across Coventry — and leave your own after your mobile valet or detail.">
+<link rel="icon" href="assets/images/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css?v=11">
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="nav scrolled">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="assets/images/logo.jpg" alt="OTR Detailing logo">
+      <span class="brand-text">OTR<small>Detailing</small></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#gallery">Our Work</a></li>
+      <li><a href="reviews.html" class="active">Reviews</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener">Instagram</a></li>
+      <li class="mobile-only"><a href="booking.html">Book Now</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="booking.html" class="btn btn-primary btn-sm desktop-only">Book Now</a>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a><span>/</span><span>Reviews</span></div>
+    <h1>Customer <span class="gradient-text">Reviews</span></h1>
+    <p>Real feedback from real customers around Coventry. Had a detail with us? We'd love to hear how it went.</p>
+    <div class="review-summary" id="review-summary" hidden></div>
+  </div>
+</section>
+
+<section style="padding-top:60px">
+  <div class="container">
+    <div class="review-grid" data-reviews-list data-limit="100"></div>
+    <div class="review-empty" data-reviews-empty hidden>
+      <p>No reviews yet — be the first to tell people about your detail.</p>
+    </div>
+  </div>
+</section>
+
+<section id="leave-review" style="background:var(--bg-alt);border-top:1px solid var(--line)">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="eyebrow" style="justify-content:center">Leave a Review</div>
+      <h2 class="section-title">How did we <span>do?</span></h2>
+      <p class="section-sub" style="margin-left:auto;margin-right:auto">It takes a minute and really helps a small local business. Reviews appear once Gideon has checked them.</p>
+    </div>
+
+    <form class="review-form contact-card" id="review-form" novalidate>
+      <fieldset class="star-input" id="star-input">
+        <legend>Your rating</legend>
+        <input type="radio" name="rating" id="r5" value="5"><label for="r5" title="5 stars">★</label>
+        <input type="radio" name="rating" id="r4" value="4"><label for="r4" title="4 stars">★</label>
+        <input type="radio" name="rating" id="r3" value="3"><label for="r3" title="3 stars">★</label>
+        <input type="radio" name="rating" id="r2" value="2"><label for="r2" title="2 stars">★</label>
+        <input type="radio" name="rating" id="r1" value="1"><label for="r1" title="1 star">★</label>
+      </fieldset>
+      <p class="star-error" id="star-error" hidden>Please choose a star rating.</p>
+
+      <div class="form-row two">
+        <div>
+          <label for="rv-name">Your Name</label>
+          <input type="text" id="rv-name" name="name" maxlength="60" required placeholder="e.g. Jordan S.">
+          <span class="error">Please enter your name</span>
+        </div>
+        <div>
+          <label for="rv-vehicle">Your Car <span class="opt">(optional)</span></label>
+          <input type="text" id="rv-vehicle" name="vehicle" maxlength="60" placeholder="e.g. Ford Fiesta">
+        </div>
+      </div>
+      <div class="form-row two">
+        <div>
+          <label for="rv-area">Area <span class="opt">(optional)</span></label>
+          <input type="text" id="rv-area" name="area" maxlength="60" placeholder="e.g. Coventry">
+        </div>
+        <div>
+          <label for="rv-email">Email <span class="opt">(optional, never shown)</span></label>
+          <input type="email" id="rv-email" name="email" maxlength="200" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <label for="rv-comment">Your Review</label>
+        <textarea id="rv-comment" name="comment" minlength="10" maxlength="1500" required placeholder="What did we do, and how did your car come out?"></textarea>
+        <span class="error">Please write at least a sentence</span>
+      </div>
+      <div class="visually-hidden" aria-hidden="true">
+        <label for="rv-company">Company</label>
+        <input type="text" id="rv-company" name="company" tabindex="-1" autocomplete="off">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Submit Review</button>
+    </form>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0">
+      <span>© 2026 OTR Detailing. All rights reserved.</span>
+      <span><a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a> · <a href="cookies.html">Cookie Policy</a> · <a href="index.html#contact">Contact</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/config.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
+</body>
+</html>

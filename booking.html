@@ -3,13 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book Now — OTR Detailing</title>
-<meta name="description" content="Book your mobile car detail with OTR Detailing in Coventry. Choose your service, pick a slot, and confirm in minutes.">
-<link rel="icon" href="assets/images/logo.jpg">
+<link rel="canonical" href="https://yrb1.github.io/OTR-Detailing/booking.html">
+<meta name="theme-color" content="#09090a">
+<meta property="og:site_name" content="OTR Detailing">
+<meta property="og:image" content="https://yrb1.github.io/OTR-Detailing/assets/images/og-image.jpg">
+<meta property="og:url" content="https://yrb1.github.io/OTR-Detailing/booking.html">
+<title>Book a Mobile Car Valet in Coventry | OTR Detailing</title>
+<meta name="description" content="Book your mobile car valet in Coventry online — pick a service, choose a slot and pay securely. Exterior from £20, interior £30, full detail £40.">
+<link rel="icon" href="assets/images/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=9">
+<link rel="stylesheet" href="css/styles.css?v=11">
 </head>
 <body>
 
@@ -25,8 +31,9 @@
       <li><a href="about.html">About</a></li>
       <li><a href="index.html#services">Services</a></li>
       <li><a href="index.html#gallery">Our Work</a></li>
-      <li><a href="index.html#reviews">Reviews</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
       <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener">Instagram</a></li>
     </ul>
     <div class="nav-actions">
       <a href="booking.html" class="btn btn-primary btn-sm desktop-only active">Book Now</a>
@@ -51,7 +58,7 @@
       <div class="progress-step" data-step="2"><div class="circle">2</div><div class="label">Vehicle</div></div>
       <div class="progress-step" data-step="3"><div class="circle">3</div><div class="label">Date &amp; Time</div></div>
       <div class="progress-step" data-step="4"><div class="circle">4</div><div class="label">Your Details</div></div>
-      <div class="progress-step" data-step="5"><div class="circle">5</div><div class="label">Payment</div></div>
+      <div class="progress-step" data-step="5"><div class="circle">5</div><div class="label">Pay</div></div>
     </div>
 
     <form class="wizard-panel" id="booking-form" novalidate>
@@ -116,7 +123,7 @@
       <!-- STEP 3: DATE & TIME -->
       <div class="wizard-step" data-step="3" hidden>
         <h2>Pick a date &amp; time</h2>
-        <p class="step-sub">Available slots for the next two weeks.</p>
+        <p class="step-sub" id="date-sub">Pick a day, then a start time. Greyed-out slots are already booked.</p>
         <div class="date-grid" id="date-grid"></div>
         <div class="time-grid" id="time-grid"></div>
       </div>
@@ -157,62 +164,43 @@
         </div>
       </div>
 
-      <!-- STEP 5: PAYMENT -->
+      <!-- STEP 5: REVIEW & PAY -->
       <div class="wizard-step" data-step="5" hidden>
-        <h2>Payment details</h2>
-        <p class="step-sub">Secure your slot with a card on file.</p>
-        <div class="demo-tag">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg>
-          Demo checkout — no card data is stored or charged
-        </div>
-        <div class="card-preview">
-          <div class="chip"></div>
-          <div class="num" id="cp-number">•••• •••• •••• ••••</div>
-          <div class="meta">
-            <div>Card Holder<b id="cp-name">YOUR NAME</b></div>
-            <div>Expires<b id="cp-expiry">MM/YY</b></div>
-          </div>
-        </div>
-        <div class="form-row">
-          <label for="pay-name">Name on Card</label>
-          <input type="text" id="pay-name" required placeholder="J SMITH" autocomplete="cc-name">
-          <span class="error">Please enter the cardholder name</span>
-        </div>
-        <div class="form-row">
-          <label for="pay-number">Card Number</label>
-          <input type="text" id="pay-number" required placeholder="1234 5678 9012 3456" inputmode="numeric" maxlength="19" autocomplete="cc-number">
-          <span class="error">Please enter a valid 16-digit card number</span>
-        </div>
-        <div class="form-row two">
-          <div>
-            <label for="pay-expiry">Expiry (MM/YY)</label>
-            <input type="text" id="pay-expiry" required placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
-            <span class="error">Please enter a valid expiry date</span>
-          </div>
-          <div>
-            <label for="pay-cvc">CVC</label>
-            <input type="text" id="pay-cvc" required placeholder="123" maxlength="4" inputmode="numeric" autocomplete="cc-csc">
-            <span class="error">Please enter the CVC</span>
-          </div>
-        </div>
-
+        <h2>Review &amp; pay</h2>
+        <p class="step-sub">Check your booking, then pay securely to lock in your slot.</p>
         <div class="summary-box" id="summary-box"></div>
+        <div class="pay-secure-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+          Payments are processed securely by Stripe. Card, Apple Pay and Google Pay accepted — your card details never touch our servers.
+        </div>
+        <div class="checkout-mount" id="checkout" hidden></div>
+        <p class="pay-error" id="pay-error" role="alert" hidden></p>
       </div>
 
       <!-- STEP 6: CONFIRMATION -->
       <div class="wizard-step" data-step="6" hidden>
-        <div class="confirm-screen">
-          <div class="confirm-icon">
+        <div class="confirm-screen" id="confirm-screen">
+          <div class="confirm-icon" id="confirm-icon">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           </div>
-          <h2>Booking Confirmed!</h2>
-          <p class="step-sub" style="margin:0 auto">Thanks — we've sent the details to your email. See you then!</p>
-          <div class="confirm-ref" id="confirm-ref">OTR-000000</div>
-          <div class="summary-box" id="confirm-summary" style="text-align:left"></div>
+          <h2 id="confirm-title">Checking your payment…</h2>
+          <p class="step-sub" id="confirm-sub" style="margin:0 auto">Just a moment.</p>
+          <div class="confirm-ref" id="confirm-ref" hidden></div>
+          <div class="summary-box" id="confirm-summary" style="text-align:left" hidden></div>
           <div class="center-btn-row">
             <a href="index.html" class="btn btn-ghost">Back to Home</a>
             <a href="booking.html" class="btn btn-primary" id="book-another">Book Another</a>
           </div>
+        </div>
+      </div>
+
+      <!-- Shown when online booking isn't connected yet -->
+      <div class="booking-offline" id="booking-offline" hidden>
+        <h2>Online booking is coming soon</h2>
+        <p class="step-sub">In the meantime, message us and Gideon will get you booked in.</p>
+        <div class="center-btn-row">
+          <a href="https://www.instagram.com/otrdetailing.uk/" target="_blank" rel="noopener" class="btn btn-primary">Message on Instagram</a>
+          <a href="mailto:otr.detailinguk@gmail.com" class="btn btn-ghost">Email Us</a>
         </div>
       </div>
 
@@ -234,8 +222,11 @@
   </div>
 </footer>
 
-<script src="js/store.js?v=1"></script>
-<script src="js/main.js?v=1"></script>
-<script src="js/booking.js?v=1"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="js/config.js?v=2"></script>
+<script src="js/api.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
+<script src="js/booking.js?v=2"></script>
 </body>
 </html>

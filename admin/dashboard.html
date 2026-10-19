@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>Booking Manager — OTR Detailing</title>
-<link rel="icon" href="../assets/images/logo.jpg">
+<link rel="icon" href="../assets/images/favicon-32.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/styles.css?v=9">
+<link rel="stylesheet" href="../css/styles.css?v=11">
 </head>
 <body>
 
@@ -46,9 +47,9 @@
     <div class="admin-topbar">
       <div>
         <h1>Booking Manager</h1>
-        <p>Welcome back, Gideon — here's what's coming up.</p>
+        <p>Welcome back — here's what's coming up.</p>
       </div>
-      <a href="../booking.html" target="_blank" class="btn btn-primary btn-sm">+ New Manual Booking</a>
+      <button type="button" class="btn btn-primary btn-sm" id="manual-open">+ Add Booking</button>
     </div>
 
     <div class="kpi-grid">
@@ -57,14 +58,14 @@
           <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
         </div>
         <div class="num" id="kpi-total">0</div>
-        <div class="lbl">Total Bookings</div>
+        <div class="lbl">Active Bookings</div>
       </div>
       <div class="kpi-card">
         <div class="top">
           <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
         </div>
         <div class="num" id="kpi-pending">0</div>
-        <div class="lbl">Pending Review</div>
+        <div class="lbl">New Enquiries</div>
       </div>
       <div class="kpi-card">
         <div class="top">
@@ -78,24 +79,24 @@
           <div class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
         </div>
         <div class="num" id="kpi-revenue">£0</div>
-        <div class="lbl">Confirmed Revenue</div>
+        <div class="lbl">Paid Online</div>
       </div>
     </div>
 
     <div class="panel">
       <div class="panel-head">
-        <h3>Bookings — Last 7 Days</h3>
-        <span style="font-size:12px;color:var(--text-faint)">By date booked in</span>
+        <h3>Jobs — Next 7 Days</h3>
+        <span style="font-size:12px;color:var(--text-faint)">Confirmed bookings per day</span>
       </div>
       <div class="chart-bars" id="chart-bars"></div>
     </div>
 
     <div class="panel">
       <div class="panel-head">
-        <h3>All Bookings</h3>
+        <h3>Bookings</h3>
         <div class="filter-row" id="filter-row">
-          <button class="filter-chip active" data-filter="all">All</button>
-          <button class="filter-chip" data-filter="pending">Pending</button>
+          <button class="filter-chip active" data-filter="upcoming">Upcoming</button>
+          <button class="filter-chip" data-filter="all">All</button>
           <button class="filter-chip" data-filter="confirmed">Confirmed</button>
           <button class="filter-chip" data-filter="completed">Completed</button>
           <button class="filter-chip" data-filter="cancelled">Cancelled</button>
@@ -125,6 +126,29 @@
         <p>No bookings match this filter yet.</p>
       </div>
     </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Enquiries</h3>
+        <span style="font-size:12px;color:var(--text-faint)">Messages from the website contact form</span>
+      </div>
+      <div class="enquiry-list" id="enquiry-list"></div>
+      <div class="empty-state" id="enquiry-empty" hidden>
+        <p>No messages yet.</p>
+      </div>
+    </div>
+
+    <div class="panel" id="reviews">
+      <div class="panel-head">
+        <h3>Reviews</h3>
+        <button type="button" class="btn btn-ghost btn-sm" id="copy-review-link">Copy Review Link for Customers</button>
+      </div>
+      <p class="sub-text" style="margin:-6px 0 16px">Approve genuine reviews to show them on the website — including less positive ones; only hide spam or abusive posts.</p>
+      <div class="enquiry-list" id="review-list"></div>
+      <div class="empty-state" id="review-empty" hidden>
+        <p>No reviews yet. Send customers the review link after each job.</p>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -136,6 +160,45 @@
     <div class="modal-actions">
       <button class="btn btn-ghost btn-sm" id="detail-close">Close</button>
     </div>
+  </div>
+</div>
+
+<!-- Manual booking modal -->
+<div class="modal-backdrop" id="manual-modal">
+  <div class="modal-card modal-wide">
+    <h3>Add a booking</h3>
+    <p>For jobs booked by phone or Instagram. The slot will show as taken on the website.</p>
+    <form id="manual-form" class="manual-form">
+      <div class="form-row two">
+        <div><label for="m-service">Service</label><select id="m-service" required></select></div>
+        <div><label for="m-date">Date</label><input type="date" id="m-date" required></div>
+      </div>
+      <div class="form-row two">
+        <div><label for="m-time">Start Time</label><input type="time" id="m-time" value="10:30" required></div>
+        <div><label for="m-name">Customer Name</label><input type="text" id="m-name" maxlength="100" required></div>
+      </div>
+      <div class="form-row two">
+        <div><label for="m-phone">Phone</label><input type="tel" id="m-phone" minlength="6" maxlength="30" required></div>
+        <div><label for="m-email">Email <span class="opt">(optional)</span></label><input type="email" id="m-email" maxlength="200"></div>
+      </div>
+      <div class="form-row"><label for="m-address">Address</label><input type="text" id="m-address" minlength="3" maxlength="300" required></div>
+      <div class="form-row two">
+        <div><label for="m-make">Make</label><input type="text" id="m-make" maxlength="60" required></div>
+        <div><label for="m-model">Model</label><input type="text" id="m-model" maxlength="60" required></div>
+      </div>
+      <div class="form-row two">
+        <div><label for="m-colour">Colour</label><input type="text" id="m-colour" maxlength="40" required></div>
+        <div><label for="m-notes">Notes <span class="opt">(optional)</span></label><input type="text" id="m-notes" maxlength="1000"></div>
+      </div>
+      <div class="form-row checkbox">
+        <input type="checkbox" id="m-paid">
+        <label for="m-paid">Already paid (otherwise marked "pay on the day")</label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="manual-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm">Add Booking</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -151,8 +214,10 @@
   </div>
 </div>
 
-<script src="../js/store.js?v=1"></script>
-<script src="../js/main.js?v=1"></script>
-<script src="../js/admin.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/config.js?v=2"></script>
+<script src="../js/api.js?v=2"></script>
+<script src="../js/main.js?v=3"></script>
+<script src="../js/admin.js?v=2"></script>
 </body>
 </html>

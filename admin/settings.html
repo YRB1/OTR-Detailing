@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
 <title>Settings — OTR Detailing</title>
-<link rel="icon" href="../assets/images/logo.jpg">
+<link rel="icon" href="../assets/images/favicon-32.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/styles.css?v=9">
+<link rel="stylesheet" href="../css/styles.css?v=11">
 </head>
 <body>
 
@@ -84,38 +85,53 @@
         <div class="form-row two">
           <div>
             <label for="s-price-interior">Interior Clean (£)</label>
-            <input type="number" id="s-price-interior" min="0" step="1" required>
+            <input type="number" id="s-price-interior" min="1" max="1000" step="0.01" required>
           </div>
           <div>
             <label for="s-price-exterior">Exterior Clean (£)</label>
-            <input type="number" id="s-price-exterior" min="0" step="1" required>
+            <input type="number" id="s-price-exterior" min="1" max="1000" step="0.01" required>
           </div>
         </div>
         <div class="form-row two">
           <div>
             <label for="s-price-full">Full Interior &amp; Exterior (£)</label>
-            <input type="number" id="s-price-full" min="0" step="1" required>
+            <input type="number" id="s-price-full" min="1" max="1000" step="0.01" required>
           </div>
           <div>
             <label for="s-cancel-fee">Late Cancellation Fee (£)</label>
-            <input type="number" id="s-cancel-fee" min="0" step="1" required>
+            <input type="number" id="s-cancel-fee" min="0" max="1000" step="0.01" required>
           </div>
         </div>
         <p style="font-size:12.5px;color:var(--text-faint);margin-top:-8px">
-          Note: this is a front-end demo, so pricing here is saved for reference only and won't update the live booking form automatically.
+          Prices update the website and are what customers pay at checkout, straight away.
         </p>
       </div>
 
       <div style="display:flex;gap:14px;justify-content:flex-end">
-        <button type="button" class="btn btn-ghost" id="reset-btn">Reset to Defaults</button>
+        <button type="button" class="btn btn-ghost" id="reset-btn">Undo Changes</button>
         <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+
+    <form id="password-form" class="panel" style="margin-top:28px">
+      <div class="panel-head"><h3>Change Password</h3></div>
+      <div class="form-row two">
+        <div>
+          <label for="s-new-pass">New Password</label>
+          <input type="password" id="s-new-pass" minlength="10" autocomplete="new-password" placeholder="At least 10 characters" required>
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <button type="submit" class="btn btn-ghost">Update Password</button>
+        </div>
       </div>
     </form>
   </main>
 </div>
 
-<script src="../js/store.js?v=1"></script>
-<script src="../js/main.js?v=1"></script>
-<script src="../js/settings.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="../js/config.js?v=2"></script>
+<script src="../js/api.js?v=2"></script>
+<script src="../js/main.js?v=3"></script>
+<script src="../js/settings.js?v=2"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /admin/
 
-Sitemap: https://otr-detailing.vercel.app/sitemap.xml
+Sitemap: https://otrdetailing.vercel.app/sitemap.xml

@@ -46,7 +46,7 @@
   "redirects": [
     {
       "source": "/booking(\\.html)?",
-      "destination": "/offline.html",
+      "destination": "https://www.instagram.com/otrdetailing.uk/",
       "permanent": false
     }
   ]

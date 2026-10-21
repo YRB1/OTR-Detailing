@@ -480,9 +480,8 @@
       .then((reviews) => {
         reviewLists.forEach((list) => {
           const shown = reviews.slice(0, Number(list.getAttribute("data-limit")) || 100);
-          list.innerHTML = shown
-            .map((r) => `
-              <article class="review-tile">
+          const isCarousel = list.getAttribute("data-variant") === "carousel";
+          const card = (r) => `
                 <div class="stars" aria-label="${r.rating} out of 5 stars">${"★".repeat(r.rating)}<span class="stars-off">${"★".repeat(5 - r.rating)}</span></div>
                 <p class="quote">"${esc(r.comment)}"</p>
                 <div class="author">
@@ -491,10 +490,20 @@
                     <div class="author-name">${esc(r.name)}</div>
                     <div class="author-meta">${esc([r.vehicle, r.area].filter(Boolean).join(" · ") || new Date(r.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" }))}</div>
                   </div>
-                </div>
-              </article>`)
+                </div>`;
+          list.innerHTML = shown
+            .map((r) => isCarousel
+              ? `<div class="review-slide"><article class="review-card">${card(r)}</article></div>`
+              : `<article class="review-tile">${card(r)}</article>`)
             .join("");
-          const empty = list.parentElement.querySelector("[data-reviews-empty]");
+          const carousel = list.closest("[data-reviews-carousel]");
+          if (carousel && shown.length) {
+            carousel.hidden = false;
+            carousel.classList.toggle("single", shown.length < 2);
+            const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+            initCarousel(carousel, { auto: shown.length > 1 && !reduceMotion, interval: 6000 });
+          }
+          const empty = list.closest("section").querySelector("[data-reviews-empty]");
           if (empty) empty.hidden = shown.length > 0;
         });
         const summary = document.getElementById("review-summary");

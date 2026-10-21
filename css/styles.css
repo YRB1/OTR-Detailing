@@ -484,6 +484,19 @@ section { position: relative; padding: 110px 0; }
 .reviews-dots { display: flex; justify-content: center; gap: 8px; margin-top: 26px; }
 .reviews-dots button { width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong); transition: all .3s; }
 .reviews-dots button.active { width: 22px; border-radius: 5px; background: var(--blue); }
+.reviews-wrap[hidden] { display: none; }
+.review-slide { display: flex; }
+.review-card { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.review-card .stars-off { color: var(--line-strong); }
+.reviews-wrap .carousel-arrow { top: calc(50% - 26px); }
+.reviews-wrap .carousel-arrow.prev { left: -66px; }
+.reviews-wrap .carousel-arrow.next { right: -66px; }
+.reviews-wrap.single .carousel-arrow, .reviews-wrap.single .reviews-dots { display: none; }
+@media (max-width: 920px) { .reviews-wrap .carousel-arrow { display: none; } }
+@media (max-width: 640px) {
+  .review-card { padding: 30px 22px; }
+  .review-card p.quote { font-size: 15.5px; }
+}
 
 /* ==========================================================================
    Instagram CTA strip

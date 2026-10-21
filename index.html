@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=11">
+<link rel="stylesheet" href="css/styles.css?v=12">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -384,12 +384,20 @@
       <div class="eyebrow" style="justify-content:center">Reviews</div>
       <h2 class="section-title">What Coventry's <span>saying.</span></h2>
     </div>
-    <div class="review-grid" data-reviews-list data-limit="3"></div>
+    <div class="reviews-wrap" data-reviews-carousel hidden>
+      <div class="reviews-track-wrap">
+        <div class="reviews-track" data-reviews-list data-limit="10" data-variant="carousel"></div>
+      </div>
+      <button class="carousel-arrow prev" aria-label="Previous review"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="carousel-arrow next" aria-label="Next review"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="reviews-dots"></div>
+    </div>
     <div class="review-empty" data-reviews-empty hidden>
       <p>We're new to online reviews — had a detail with us? Be the first to leave one.</p>
     </div>
     <div class="center-btn-row reveal" style="margin-top:34px">
       <a href="reviews.html" class="btn btn-ghost">Read All Reviews</a>
+      <a href="https://share.google/RBPLtZnrxyKcJtizj" class="btn btn-ghost" target="_blank" rel="noopener">See Us on Google</a>
       <a href="reviews.html#leave-review" class="btn btn-primary">Leave a Review</a>
     </div>
   </div>
@@ -548,6 +556,6 @@
 </footer>
 
 <script src="js/config.js?v=3"></script>
-<script src="js/main.js?v=3"></script>
+<script src="js/main.js?v=4"></script>
 </body>
 </html>

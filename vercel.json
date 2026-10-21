@@ -45,7 +45,7 @@
   ],
   "redirects": [
     {
-      "source": "/((?!offline\\.html|admin|assets|css|js|robots\\.txt).*)",
+      "source": "/booking(\\.html)?",
       "destination": "/offline.html",
       "permanent": false
     }

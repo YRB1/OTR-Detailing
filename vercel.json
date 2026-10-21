@@ -42,12 +42,5 @@
         }
       ]
     }
-  ],
-  "redirects": [
-    {
-      "source": "/booking(\\.html)?",
-      "destination": "https://www.instagram.com/otrdetailing.uk/",
-      "permanent": false
-    }
   ]
 }

@@ -625,25 +625,103 @@
     resetIdleTimer();
   }
 
-  /* ---------- Cookie consent banner ---------- */
-  if (!localStorage.getItem("otr_cookie_consent")) {
+  /* ---------- Cookie consent + Google Analytics ----------
+     Analytics (GA4) only loads once a visitor clicks "Accept". Rejecting
+     keeps the site to essential storage only. Ads features are always off.
+     Choice is stored as "all" or "essential" under otr_consent_v2. */
+  const CONSENT_KEY = "otr_consent_v2";
+  const onAdminPage = !!document.querySelector(".admin-shell, .admin-login-wrap");
+  const gaId = (window.OTR_CONFIG && window.OTR_CONFIG.gaMeasurementId) || "";
+  let gaLoaded = false;
+
+  function readConsent() {
+    try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
+  }
+  function saveConsent(v) {
+    try { localStorage.setItem(CONSENT_KEY, v); localStorage.removeItem("otr_cookie_consent"); } catch (e) {}
+  }
+
+  function loadAnalytics() {
+    if (gaLoaded || !gaId || onAdminPage) return;
+    gaLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    gtag("consent", "default", {
+      ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied",
+      analytics_storage: "granted",
+    });
+    gtag("js", new Date());
+    gtag("config", gaId, {
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(gaId);
+    document.head.appendChild(s);
+  }
+
+  // Lead tracking: Instagram / email / booking clicks become GA4 events,
+  // so the owner can see which pages actually bring in customers.
+  function track(name, params) {
+    if (gaLoaded && typeof window.gtag === "function") window.gtag("event", name, params || {});
+  }
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    const href = a.getAttribute("href") || "";
+    const where = { link_url: a.href, page: location.pathname };
+    if (href.includes("instagram.com")) track("contact_instagram", where);
+    else if (href.startsWith("mailto:")) track("contact_email", where);
+    else if (href.startsWith("tel:")) track("contact_phone", where);
+    else if (href.includes("booking.html")) {
+      const m = href.match(/service=([a-z]+)/);
+      track("book_click", Object.assign({ service: m ? m[1] : "any" }, where));
+    }
+  }, { capture: true });
+  document.addEventListener("submit", (e) => {
+    if (e.target && e.target.id) track("form_submit", { form_id: e.target.id, page: location.pathname });
+  }, { capture: true });
+
+  function showConsentBanner() {
+    if (document.querySelector(".cookie-banner")) return;
     const banner = document.createElement("div");
     banner.className = "cookie-banner";
-    const onAdminPage = !!document.querySelector(".admin-shell, .admin-login-wrap");
+    banner.setAttribute("role", "dialog");
+    banner.setAttribute("aria-label", "Cookie choices");
     const prefix = onAdminPage ? "../" : "";
     banner.innerHTML = `
-      <p>We only use essential storage — to keep the owner signed in and to take payments securely through Stripe. No advertising or tracking cookies. See our <a href="${prefix}cookies.html">Cookie Policy</a>.</p>
+      <p>We use essential storage to run the site, and — only if you accept — Google Analytics to see how visitors use it so we can improve it. No advertising cookies. See our <a href="${prefix}cookies.html">Cookie Policy</a>.</p>
       <div class="cookie-actions">
-        <a href="${prefix}cookies.html" class="btn btn-ghost btn-sm">Learn More</a>
-        <button type="button" class="btn btn-primary btn-sm" id="cookie-accept">Got It</button>
+        <button type="button" class="btn btn-ghost btn-sm" data-consent="essential">Reject</button>
+        <button type="button" class="btn btn-primary btn-sm" data-consent="all">Accept</button>
       </div>
     `;
     document.body.appendChild(banner);
     requestAnimationFrame(() => banner.classList.add("show"));
-    document.getElementById("cookie-accept").addEventListener("click", () => {
-      localStorage.setItem("otr_cookie_consent", "1");
-      banner.classList.remove("show");
-      setTimeout(() => banner.remove(), 400);
-    });
+    banner.querySelectorAll("[data-consent]").forEach((btn) =>
+      btn.addEventListener("click", () => {
+        const choice = btn.getAttribute("data-consent");
+        saveConsent(choice);
+        if (choice === "all") loadAnalytics();
+        banner.classList.remove("show");
+        setTimeout(() => banner.remove(), 400);
+      })
+    );
   }
+
+  // Any element with data-cookie-settings reopens the banner (e.g. on the Cookie Policy page).
+  document.querySelectorAll("[data-cookie-settings]").forEach((el) =>
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      const wasOn = readConsent() === "all";
+      try { localStorage.removeItem(CONSENT_KEY); } catch (err) {}
+      if (wasOn) { location.reload(); return; } // unload GA cleanly
+      showConsentBanner();
+    })
+  );
+
+  const consent = readConsent();
+  if (consent === "all") loadAnalytics();
+  else if (!consent && !onAdminPage) showConsentBanner();
 })();

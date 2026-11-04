@@ -10,4 +10,8 @@ window.OTR_CONFIG = {
   stripePublishableKey: "pk_live_51USNLfDTJsNRlGmyKqXqkv6ytvXCHrtoA43EXMpfwXsfHvncArQRFbqsNsT0HDPJywogOTCFWZe81bYPrnpAsgGP00nt50XqsB",
   instagramUrl: "https://www.instagram.com/otrdetailing.uk/",
   contactEmail: "otr.detailinguk@gmail.com",
+  // Google Analytics 4 Measurement ID (looks like "G-XXXXXXXXXX").
+  // Leave empty to switch analytics off. Analytics only loads after a
+  // visitor clicks "Accept" on the cookie banner.
+  gaMeasurementId: "",
 };
